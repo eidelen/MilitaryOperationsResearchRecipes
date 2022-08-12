@@ -20,6 +20,17 @@ The sensor parameters <img src="https://latex.codecogs.com/svg.image?W" title="W
 <img src="https://latex.codecogs.com/svg.image?v" title="A_i" /> is a regions areal size and <img src="https://latex.codecogs.com/svg.image?v" title="p_i" /> the probability that a target might be located there. 
 <img src="https://latex.codecogs.com/svg.image?P" title="P" /> is the overall probability of detection and core objective.  
 
+Let's stick to above situation with the potential presence of tanks and battle ships.
+The overall search effort is one day <img src="https://latex.codecogs.com/svg.image?t=24h"/>.
+<img src="https://latex.codecogs.com/svg.image?i" title="i" /> | Type | <img src="https://latex.codecogs.com/svg.image?A_i&space;\;\;&space;[\text{km}^2]" title="A_i \;\; [\text{km}^2]" /> | <img src="https://latex.codecogs.com/svg.image?p_i" title="p_i" />  
+--- | --- | --- | --- 
+1 | urban | 14.1  | 0.6 
+2 | mountain | 6.3  | 0.1 
+3 | mountain | 4.1  | 0.1 
+4 | water | 3.5  | 0.4 
+5 | water | 1.9  | 0.4 
+6 | mountain | 9.1  | 0.1
+
 Reference: Military Operations Research, Jaiswal
 
 
