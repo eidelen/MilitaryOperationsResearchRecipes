@@ -11,7 +11,7 @@ def doOptSearch():
     # define parameters
     w = 200  # m
     v = 10   # m/s
-    t = 10 * 60 * 60 # s
+    t = 3 * 60 * 60 # s
     areas = [("A1", "urban", 14100000, 0.55), ("A2", "mountain", 6300000, 0.05), ("A3", "mountain", 4100000, 0.05),
              ("A4", "water", 3500000, 0.15), ("A5", "water", 1900000, 0.15), ("A6", "mountain", 9100000, 0.05)]
 
@@ -63,14 +63,14 @@ def solveByTrying(allAreas, sweepWidth, velocity, totalTime):
 
     # generate trials
     nAreas = len(allAreas)
-    x = np.linspace(-1.0, 1.0, num=10)
+    x = np.linspace(-1.0, 1.0, num=15)
     trls = [trls for trls in itertools.product(x, repeat=nAreas)]
 
     # to narrow in on solution - is adapted during solve iterations
     amplifiers = np.full(nAreas, totalTime / 2.0)
     bases = np.full(nAreas, totalTime / 2.0)
 
-    nSolveIterations = 5
+    nSolveIterations = 10
     progress = (len(trls) * nSolveIterations, 0, 1, 0)
 
     # keep track of best solution
@@ -78,8 +78,6 @@ def solveByTrying(allAreas, sweepWidth, velocity, totalTime):
     bestEfforts = []
 
     for solveIters in range(nSolveIterations):
-
-        amplifiers = amplifiers / (solveIters+1)
 
         print("-------------------------------")
         print("amp:", amplifiers)
@@ -108,12 +106,19 @@ def solveByTrying(allAreas, sweepWidth, velocity, totalTime):
 
         # adjust base to best solution
         bases = bestEfforts
+        amplifiers = amplifiers / 2
 
     # print results
     print("\n\n############## Optimal Search Strategy ##############\n" )
     print("Probability of Detection =", maxProbability * 100, "% in", totalTime/3600, "hours\n")
     for areai, ti in zip(allAreas, bestEfforts):
         print(areai[0], areai[1], ": Effort = ", ti, "s (", ti/3600, "h,", ti /totalTime*100, "% )")
+
+    totalArea = 0
+    for _,_,anArea,_  in allAreas:
+        totalArea += anArea
+    nonOptProb = randomSearchKoopman(sweepWidth, velocity, totalArea, totalTime)
+    print("\nProbability of Detection non-optimized =", nonOptProb * 100, "%, total area =", totalArea/1000000, "km^2")
 
 
 
