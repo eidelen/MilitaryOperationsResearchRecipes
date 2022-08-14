@@ -11,7 +11,7 @@ def doOptSearch():
     # define parameters
     w = 200  # m
     v = 10   # m/s
-    t = 5 * 60 * 60 # s
+    t = 10 * 60 * 60 # s
     areas = [("A1", "urban", 14100000, 0.55), ("A2", "mountain", 6300000, 0.05), ("A3", "mountain", 4100000, 0.05),
              ("A4", "water", 3500000, 0.15), ("A5", "water", 1900000, 0.15), ("A6", "mountain", 9100000, 0.05)]
 
@@ -109,7 +109,11 @@ def solveByTrying(allAreas, sweepWidth, velocity, totalTime):
         # adjust base to best solution
         bases = bestEfforts
 
-    print("Best Result: ", maxProbability, bestEfforts)
+    # print results
+    print("\n\n############## Optimal Search Strategy ##############\n" )
+    print("Probability of Detection =", maxProbability * 100, "% in", totalTime/3600, "hours\n")
+    for areai, ti in zip(allAreas, bestEfforts):
+        print(areai[0], areai[1], ": Effort = ", ti, "s (", ti/3600, "h,", ti /totalTime*100, "% )")
 
 
 
