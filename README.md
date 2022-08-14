@@ -21,15 +21,15 @@ The sensor parameters <img src="https://latex.codecogs.com/svg.image?W" title="W
 <img src="https://latex.codecogs.com/svg.image?P" title="P" /> is the overall probability of detection and core objective.  
 
 Let's stick to above situation with the potential presence of tanks and battle ships.
-The overall search effort is one day <img src="https://latex.codecogs.com/svg.image?t=24\text{h}"/>, the sweep width <img src="https://latex.codecogs.com/svg.image?W=200\text{m}"/> and <img src="https://latex.codecogs.com/svg.image?v=10\text{m/s}"/>
+The overall search effort are 10 hours <img src="https://latex.codecogs.com/svg.image?t=10\text{h}"/>, the sweep width <img src="https://latex.codecogs.com/svg.image?W=200\text{m}"/> and <img src="https://latex.codecogs.com/svg.image?v=10\text{m/s}"/>
 <img src="https://latex.codecogs.com/svg.image?i" title="i" /> | Type | <img src="https://latex.codecogs.com/svg.image?A_i&space;\;\;&space;[\text{km}^2]" title="A_i \;\; [\text{km}^2]" /> | <img src="https://latex.codecogs.com/svg.image?p_i" title="p_i" />  
 --- | --- | --- | --- 
-1 | urban | 14.1  | 0.6 
-2 | mountain | 6.3  | 0.1 
-3 | mountain | 4.1  | 0.1 
-4 | water | 3.5  | 0.4 
-5 | water | 1.9  | 0.4 
-6 | mountain | 9.1  | 0.1
+1 | urban | 14.1  | 0.55
+2 | mountain | 6.3  | 0.05 
+3 | mountain | 4.1  | 0.05 
+4 | water | 3.5  | 0.15
+5 | water | 1.9  | 0.15
+6 | mountain | 9.1  | 0.05  
 
 Reference: Military Operations Research, Jaiswal
 
