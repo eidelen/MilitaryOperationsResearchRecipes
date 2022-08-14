@@ -12,8 +12,8 @@ def doOptSearch():
     w = 200  # m
     v = 10   # m/s
     t = 5 * 60 * 60 # s
-    areas = [("A1", "urban", 14100000, 0.40), ("A2", "mountain", 6300000, 0.10), ("A3", "mountain", 4100000, 0.10),
-             ("A4", "water", 3500000, 0.15), ("A5", "water", 1900000, 0.15), ("A6", "mountain", 9100000, 0.10)]
+    areas = [("A1", "urban", 14100000, 0.55), ("A2", "mountain", 6300000, 0.05), ("A3", "mountain", 4100000, 0.05),
+             ("A4", "water", 3500000, 0.15), ("A5", "water", 1900000, 0.15), ("A6", "mountain", 9100000, 0.05)]
 
     print("w=" + str(w) + " m, v=" + str(v) + " m/s, t=" + str(t) + " s")
     for area_name, area_type, area_size, prop in areas:
@@ -60,42 +60,56 @@ def doOptSearch():
     #         print(x, ":", minProb, minEffort)
 
 def solveByTrying(allAreas, sweepWidth, velocity, totalTime):
-    nAreas = len(allAreas)
 
     # generate trials
+    nAreas = len(allAreas)
     x = np.linspace(-1.0, 1.0, num=10)
     trls = [trls for trls in itertools.product(x, repeat=nAreas)]
-    nTrials = len(trls)
-    iTri = 0
-    maxProb = 0
-    maxEfforts = []
-    amplifiers = np.full(nAreas, totalTime/2.0) # all areas are tried with full effort scale
-    bases = np.full(nAreas, totalTime/2.0)
-    for solveIters in range(5):
+
+    # to narrow in on solution - is adapted during solve iterations
+    amplifiers = np.full(nAreas, totalTime / 2.0)
+    bases = np.full(nAreas, totalTime / 2.0)
+
+    nSolveIterations = 5
+    progress = (len(trls) * nSolveIterations, 0, 1, 0)
+
+    # keep track of best solution
+    maxProbability = 0
+    bestEfforts = []
+
+    for solveIters in range(nSolveIterations):
 
         amplifiers = amplifiers / (solveIters+1)
 
+        print("-------------------------------")
         print("amp:", amplifiers)
         print("base:", bases)
 
         for tr in trls:
             # adjust to total invested effort
-            iTri = iTri + 1
-            nextEfforts = (np.array(tr) * amplifiers) + bases
-            nextEfforts = np.clip(nextEfforts, 0.0, totalTime)
-            sumNextEfforts = np.sum(nextEfforts)
-            if sumNextEfforts > 0.0001:
-                nextEfforts = nextEfforts * totalTime / np.sum(nextEfforts)
-                detectProb = computeOverallProbabilityOfDetection(allAreas, sweepWidth, velocity, nextEfforts)
-                if detectProb > maxProb:
-                    maxProb = detectProb
-                    maxEfforts = nextEfforts
-                    print( iTri, "(", iTri/nTrials*100, ")", ": New best trial: ", maxProb, maxEfforts)
+            progress = (progress[0], progress[1] + 1, progress[2], progress[3])
+
+            thisEfforts = np.clip((np.array(tr) * amplifiers) + bases, 0.0, totalTime)
+            sumThisEfforts = np.sum(thisEfforts)
+            if sumThisEfforts > 0.0001:
+                # adjust that sum of effort is equal total effort time
+                thisEfforts = thisEfforts * totalTime / sumThisEfforts
+                thisProb = computeOverallProbabilityOfDetection(allAreas, sweepWidth, velocity, thisEfforts)
+
+                if thisProb > maxProbability:
+                    maxProbability = thisProb
+                    bestEfforts = thisEfforts
+                    print("New best trial: ", maxProbability, bestEfforts)
+
+            prog = math.floor(progress[1] / progress[0] * 100)
+            if prog > progress[3]:
+                progress = (progress[0], progress[1], progress[2], prog)
+                print("Progress: ", prog, "%")
 
         # adjust base to best solution
-        bases = maxEfforts
+        bases = bestEfforts
 
-    print("Best Result: ", maxProb, maxEfforts)
+    print("Best Result: ", maxProbability, bestEfforts)
 
 
 
