@@ -1,17 +1,76 @@
 import math
-import numpy as np
-import itertools
-import random
-import matplotlib.pyplot as plt
 import scipy.optimize as opt
 
-def doOptSearch():
-    print("Optimal Search Strategy - armasuisse W+T")
+
+def meanTimeOfDetection(sweepWidth, velocity, area):
+    # meantime of detection -> denoted T in formula
+    return area / (velocity * sweepWidth) # denoted T in formula
+
+def randomSearchKoopman(sweepWidth, velocity, area, time):
+    # The probability of detecting a target in given time and area
+    return 1.0 - math.exp(-time/meanTimeOfDetection(sweepWidth, velocity, area))
+
+def accumulateProbabilityOfDetection(allAreas, sweepWidth, velocity, efforts):
+    # accumulates the probability of detection given search efforts
+    probAccum = 0
+    for ar, time in zip(allAreas, efforts):
+        _, _, areaSize, areaProb = ar
+        probAccum += areaProb * randomSearchKoopman(sweepWidth, velocity, areaSize, time)
+    return probAccum
+
+def minimizeAccumProbOfDetection(efforts, areas, sweepWidth, velocity):
+    # function to minimize
+    val = 0
+    for time, ar in zip(efforts, areas):
+        _, _, areaSize, prob = ar
+        val += prob * math.exp(-time/meanTimeOfDetection(sweepWidth, velocity, areaSize))
+    return val
+
+def gradientMinAccumProbOfDetection(efforts, areas, sweepWidth, velocity):
+    # gradient of the function to minimize
+    drv = []
+    for time, ar in zip(efforts, areas):
+        _, _, areaSize, prob = ar
+        c = meanTimeOfDetection(sweepWidth, velocity, areaSize)
+        d = prob * -1.0/c * math.exp(-(time/c))
+        drv.append(d)
+    return drv
+
+def solveBySLSQP(allAreas, sweepWidth, velocity, totalTime):
+    # solve by using SLSQP solver with constraints
+    nArea = len(allAreas)
+
+    minFunc = lambda efforts: minimizeAccumProbOfDetection(efforts, allAreas, sweepWidth, velocity)
+    gradientMinFunc = lambda efforts: gradientMinAccumProbOfDetection(efforts, allAreas, sweepWidth, velocity)
+
+    # sum of all efforts needs to be equal the total time
+    cons = ({'type': 'eq', 'fun': lambda efforts: totalTime - sum(efforts)})
+
+    # optimizer
+    print("\n------- optimizer output ----------")
+    optSLSQPRes = opt.minimize(minFunc, [t for t in range(nArea)],
+                               method='SLSQP',
+                               options={'ftol': 1e-20, 'disp': True},
+                               jac=gradientMinFunc,
+                               constraints=cons,
+                               bounds=[(0, totalTime) for x in range(nArea)])
+    print("------------------------------------")
+
+    # print results
+    maxDetectionProb = accumulateProbabilityOfDetection(allAreas, sweepWidth, velocity, optSLSQPRes.x)
+    print("\n############## Optimal Search Strategy - SLSQP Method ##############\n")
+    print("Probability of Detection =", maxDetectionProb * 100, "% in", totalTime / 3600, "hours\n")
+    for area, time in zip(allAreas, optSLSQPRes.x):
+        print(area[0], area[1], ": Effort = ", time, "s (", time / 3600, "h,", time / totalTime * 100, "% )")
+
+if __name__ == "__main__":
+    print("Optimal Search Strategy - armasuisse W+T, Adrian Schneider")
+    print("##########################################################\n")
 
     # define parameters
     w = 200  # m
-    v = 10   # m/s
-    t = 3 * 60 * 60 # s
+    v = 10  # m/s
+    t = 3 * 60 * 60  # s
     areas = [("A1", "urban", 14100000, 0.55), ("A2", "mountain", 6300000, 0.05), ("A3", "mountain", 4100000, 0.05),
              ("A4", "water", 3500000, 0.15), ("A5", "water", 1900000, 0.15), ("A6", "mountain", 9100000, 0.05)]
 
@@ -19,148 +78,11 @@ def doOptSearch():
     for area_name, area_type, area_size, prop in areas:
         print(area_name + ": " + area_type + ", " + str(area_size) + " m^2, " + "p=" + str(prop))
 
-    solveByTrying(areas, w, v, t)
+    solveBySLSQP(areas, w, v, t)
 
-
-    #my_constraints = ({'type': 'eq', "fun": apply_sum_constraint})
-
-    #fun = lambda ti: minimizeFunctionProbDetection(areas, w, v, ti)
-    #res_cons = opt.minimize(fun, (t/6, t/6, t/6, t/6, t/6, t/6),
-    #                             method='SLSQP', options={'disp': True, 'eps': 1}, constraints=my_constraints)
-
-    # print(res_cons)
-
-
-    # use scipy optimizer
-
-    #bnds = ((0, t), (0, t), (0, t), (0, t), (0, t), (0, t))
-    #res = opt.minimize(fun, (t/6, t/6, t/6, t/6, t/6,t/6), method='TNC', bounds=bnds, tol=1e-10, options={'disp': True})
-
-    #print(res)
-
-
-    #x_t = np.arange(0., 21600, 1)
-    #y_t = np.array([randomSearchKoopman(w, v, 16000000, x) for x in x_t])
-
-    #plt.plot(x_t, y_t, 'ro')
-    #plt.show()
-
-
-
-    # minProb = 1.0;
-    # minEffort = []
-    #
-    # for x in range(1000000):
-    #     rndEfforts = np.random.rand(nAreas)
-    #     rndEfforts = t / np.sum(rndEfforts) * rndEfforts
-    #     thisRun = minimizeFunctionProbDetection(areas, w, v, rndEfforts)
-    #     if thisRun < minProb:
-    #         minProb = thisRun
-    #         minEffort = rndEfforts
-    #         print(x, ":", minProb, minEffort)
-
-def solveByTrying(allAreas, sweepWidth, velocity, totalTime):
-
-    # generate trials
-    nAreas = len(allAreas)
-    x = np.linspace(-1.0, 1.0, num=15)
-    trls = [trls for trls in itertools.product(x, repeat=nAreas)]
-
-    # to narrow in on solution - is adapted during solve iterations
-    amplifiers = np.full(nAreas, totalTime / 2.0)
-    bases = np.full(nAreas, totalTime / 2.0)
-
-    nSolveIterations = 10
-    progress = (len(trls) * nSolveIterations, 0, 1, 0)
-
-    # keep track of best solution
-    maxProbability = 0
-    bestEfforts = []
-
-    for solveIters in range(nSolveIterations):
-
-        print("-------------------------------")
-        print("amp:", amplifiers)
-        print("base:", bases)
-
-        for tr in trls:
-            # adjust to total invested effort
-            progress = (progress[0], progress[1] + 1, progress[2], progress[3])
-
-            thisEfforts = np.clip((np.array(tr) * amplifiers) + bases, 0.0, totalTime)
-            sumThisEfforts = np.sum(thisEfforts)
-            if sumThisEfforts > 0.0001:
-                # adjust that sum of effort is equal total effort time
-                thisEfforts = thisEfforts * totalTime / sumThisEfforts
-                thisProb = computeOverallProbabilityOfDetection(allAreas, sweepWidth, velocity, thisEfforts)
-
-                if thisProb > maxProbability:
-                    maxProbability = thisProb
-                    bestEfforts = thisEfforts
-                    print("New best trial: ", maxProbability, bestEfforts)
-
-            prog = math.floor(progress[1] / progress[0] * 100)
-            if prog > progress[3]:
-                progress = (progress[0], progress[1], progress[2], prog)
-                print("Progress: ", prog, "%")
-
-        # adjust base to best solution
-        bases = bestEfforts
-        amplifiers = amplifiers / 2
-
-    # print results
-    print("\n\n############## Optimal Search Strategy ##############\n" )
-    print("Probability of Detection =", maxProbability * 100, "% in", totalTime/3600, "hours\n")
-    for areai, ti in zip(allAreas, bestEfforts):
-        print(areai[0], areai[1], ": Effort = ", ti, "s (", ti/3600, "h,", ti /totalTime*100, "% )")
-
+    # compute non-optimized detection probability
     totalArea = 0
-    for _,_,anArea,_  in allAreas:
+    for _, _, anArea, _ in areas:
         totalArea += anArea
-    nonOptProb = randomSearchKoopman(sweepWidth, velocity, totalArea, totalTime)
-    print("\nProbability of Detection non-optimized =", nonOptProb * 100, "%, total area =", totalArea/1000000, "km^2")
-
-
-
-
-
-
-
-def apply_sum_constraint(inputs):
-    # return value must come back as 0 to be accepted
-    # if return value is anything other than 0 it's rejected
-    # as not a valid answer.
-    total = 5 * 60 * 60 - np.sum(inputs)
-    return total
-
-def minimizeFunctionProbDetection(allAreas, sweepWidth, velocity, efforts):
-    # transform maximize to minimize problem
-    optSum = 0
-
-    for ar, ti in zip(allAreas, efforts):
-        areaName, areaType, areaSize, areaProp = ar
-        optSum = optSum + areaProp * (1.0 - randomSearchKoopman(sweepWidth, velocity, areaSize, ti))
-
-    return optSum
-
-
-def computeOverallProbabilityOfDetection(allAreas, sweepWidth, velocity, efforts):
-    probSum = 0
-
-    for ar, ti in zip(allAreas, efforts):
-        areaName, areaType, areaSize, areaProp = ar
-        probSum = probSum + areaProp * randomSearchKoopman(sweepWidth, velocity, areaSize, ti)
-
-    return probSum
-
-
-def meanTimeOfDetection(sweepWidth: float, velocity: float, area: float):
-    return area / (velocity * sweepWidth) # denoted T in formula
-
-
-def randomSearchKoopman(sweepWidth: float, velocity: float, area: float, time: float):
-    # The probability of detecting a target in given time.
-    return 1.0 - math.exp(-time/meanTimeOfDetection(sweepWidth, velocity, area))
-
-if __name__ == "__main__":
-    doOptSearch()
+    nonOptProb = randomSearchKoopman(w, v, totalArea, t)
+    print("\nProbability of Detection non-optimized =", nonOptProb * 100, "%, total area =", totalArea / 1000000, "km^2")
