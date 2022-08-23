@@ -21,7 +21,7 @@ The sensor parameters <img src="https://latex.codecogs.com/svg.image?W" title="W
 <img src="https://latex.codecogs.com/svg.image?P" title="P" /> is the overall probability of detection and core objective.  
 
 Let's stick to above situation with the potential presence of tanks and battle ships.
-The overall search effort are 10 hours <img src="https://latex.codecogs.com/svg.image?t=10\text{h}"/>, the sweep width <img src="https://latex.codecogs.com/svg.image?W=200\text{m}"/> and <img src="https://latex.codecogs.com/svg.image?v=10\text{m/s}"/>
+The overall search effort are 3 hours <img src="https://latex.codecogs.com/svg.image?t=10\text{h}"/>, the sweep width <img src="https://latex.codecogs.com/svg.image?W=200\text{m}"/> and <img src="https://latex.codecogs.com/svg.image?v=10\text{m/s}"/>
 <img src="https://latex.codecogs.com/svg.image?i" title="i" /> | Type | <img src="https://latex.codecogs.com/svg.image?A_i&space;\;\;&space;[\text{km}^2]" title="A_i \;\; [\text{km}^2]" /> | <img src="https://latex.codecogs.com/svg.image?p_i" title="p_i" />  
 --- | --- | --- | --- 
 1 | urban | 14.1  | 0.55
@@ -30,6 +30,20 @@ The overall search effort are 10 hours <img src="https://latex.codecogs.com/svg.
 4 | water | 3.5  | 0.15
 5 | water | 1.9  | 0.15
 6 | mountain | 9.1  | 0.05  
+
+Here is a [little example](optimal-search.py) of how such a problem can be solved by using scipy's SLSQP solver with constraints.
+Note that there might exist better approaches to tackle this task.
+The optimal strategy of investing search time in each area is
+<img src="https://latex.codecogs.com/svg.image?i" title="i" /> | Type | effort
+--- | --- | --- 
+1 | urban | 2.00 h  
+2 | mountain | 0.00 h
+3 | mountain | 0.00
+4 | water | 0.54 h
+5 | water | 0.45 h
+6 | mountain | 0.00 h
+
+The overall probability of detecting an object within these 3 hours is 57.6 %. As a comparison, following no strategy results in a probabilty of dection of just 42.5 %.
 
 Reference: Military Operations Research, Jaiswal
 
