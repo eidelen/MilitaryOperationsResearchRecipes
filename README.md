@@ -17,33 +17,35 @@ The applied mathematical model is derived from the <b>random search formula of K
 
 Please note that <img src="https://latex.codecogs.com/svg.image?t_i" title="t_i" /> are the parameters to optimize and represent the search effort in time invested in the corresponding region, whereas <img src="https://latex.codecogs.com/svg.image?t" title="t" /> denotes the overall available search time.
 The sensor parameters <img src="https://latex.codecogs.com/svg.image?W" title="W" /> is the <b>sweep width</b> and <img src="https://latex.codecogs.com/svg.image?v" title="W" /> the scanning speed.
-<img src="https://latex.codecogs.com/svg.image?v" title="A_i" /> is a regions areal size and <img src="https://latex.codecogs.com/svg.image?v" title="p_i" /> the probability that a target might be located there. 
+<img src="https://latex.codecogs.com/svg.image?A_i" title="A_i" /> is a regions areal size and <img src="https://latex.codecogs.com/svg.image?p_i" title="p_i" /> the probability that a target might be located there. 
 <img src="https://latex.codecogs.com/svg.image?P" title="P" /> is the overall probability of detection and core objective.  
 
 Let's stick to above situation with the potential presence of tanks and battle ships.
-The overall search effort are 3 hours <img src="https://latex.codecogs.com/svg.image?t=10\text{h}"/>, the sweep width <img src="https://latex.codecogs.com/svg.image?W=200\text{m}"/> and <img src="https://latex.codecogs.com/svg.image?v=10\text{m/s}"/>
-<img src="https://latex.codecogs.com/svg.image?i" title="i" /> | Type | <img src="https://latex.codecogs.com/svg.image?A_i&space;\;\;&space;[\text{km}^2]" title="A_i \;\; [\text{km}^2]" /> | <img src="https://latex.codecogs.com/svg.image?p_i" title="p_i" />  
---- | --- | --- | --- 
-1 | urban | 14.1  | 0.55
-2 | mountain | 6.3  | 0.05 
-3 | mountain | 4.1  | 0.05 
-4 | water | 3.5  | 0.15
-5 | water | 1.9  | 0.15
-6 | mountain | 9.1  | 0.05  
+The sweep width is <img src="https://latex.codecogs.com/svg.image?W=200\text{m}"/> and <img src="https://latex.codecogs.com/svg.image?v=10\text{m/s}"/>.
+The table below summarizes the properties of the regions.
+|  | Type | <img src="https://latex.codecogs.com/svg.image?A_i&space;\;\;&space;[\text{km}^2]" title="A_i \;\; [\text{km}^2]" /> | <img src="https://latex.codecogs.com/svg.image?p_i" title="p_i" />   |
+| --- | --- | --- | --- |
+| Area 1 | urban | 14.1  | 0.55 |
+| Area 2 | mountain | 6.3  | 0.05  |
+| Area 3 | mountain | 4.1  | 0.05  |
+| Area 4 | water | 3.5  | 0.15 |
+| Area 5 | water | 1.9  | 0.15 |
+| Area 6 | mountain | 9.1  | 0.05   |
 
 Here is a [little example](optimal-search.py) of how such a problem can be solved by using scipy's SLSQP solver with constraints.
 Note that there might exist better approaches to tackle this task.
-The optimal strategy of investing search time in each area is
-<img src="https://latex.codecogs.com/svg.image?i" title="i" /> | Type | effort
---- | --- | --- 
-1 | urban | 2.00 h  
-2 | mountain | 0.00 h
-3 | mountain | 0.00
-4 | water | 0.54 h
-5 | water | 0.45 h
-6 | mountain | 0.00 h
+The following table summarizes the optimal search strategies for different total search efforts of <img src="https://latex.codecogs.com/svg.image?\inline&space;t&space;=&space;3,&space;5,&space;8,&space;13&space;&space;" title="https://latex.codecogs.com/svg.image?\inline t = 3, 5, 8, 13 " /> hours.
 
-The overall probability of detecting an object within these 3 hours is 57.6 %. As a comparison, following no strategy results in a probabilty of dection of just 42.5 %.
+|    | 3 hours effort | 5 hours effort | 8 hours effort | 13 hours effort |
+| --- | ---  | --- | --- | --- |
+| Area 1 | 2.00 h | 3.22 h | 4.45 h | 6.27 h | 
+| Area 2 | 0.00 h | 0.04 h | 0.57 h | 1.40 h | 
+| Area 3 | 0.00 h | 0.27 h | 0.64 h | 1.16 h | 
+| Area 4 | 0.54 h | 0.84 h | 1.15 h | 1.60 h | 
+| Area 5 | 0.45 h | 0.62 h | 0.79 h | 1.03 h | 
+| Area 6 | 0.00 h | 0.00 h | 0.40 h | 1.56 h | 
+| Optimized Detection Probability | 57.6 % | 72.4 % | 84.3 % | 93.8 % | 
+| Non-optimized Detection Probability | 42.5 % | 60.3 % | 77.2 % | 90.9 % | 
 
 Reference: Military Operations Research, Jaiswal
 
