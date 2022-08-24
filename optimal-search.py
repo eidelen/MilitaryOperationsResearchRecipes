@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # define parameters
     w = 200  # m
     v = 10  # m/s
-    t = 3 * 60 * 60  # s
+    t = 13 * 60 * 60  # 13 hours in seconds
     areas = [("A1", "urban", 14100000, 0.55), ("A2", "mountain", 6300000, 0.05), ("A3", "mountain", 4100000, 0.05),
              ("A4", "water", 3500000, 0.15), ("A5", "water", 1900000, 0.15), ("A6", "mountain", 9100000, 0.05)]
 
