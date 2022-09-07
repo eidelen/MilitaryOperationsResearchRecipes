@@ -31,19 +31,30 @@ def comp_g(sensors):
         g += linedist*math.cos(ang) / sensorerr**2
     return g
 
+def dist_pnt2line( line, point ):
+    lineAngle, pntOnLine = line
+    pntLineX, pntLineY = pntOnLine
+    pntX, pntY = point
+    return math.cos(lineAngle)*(pntLineY-pntY) - math.sin(lineAngle)*(pntLineX - pntX)
+
+
+def accum_distSQ(lines, point):
+    sqDist = 0
+    x, y = point
+    for lineAng, linePnt, lineAccuracy in lines:
+        sqDist += dist_pnt2line((lineAng, linePnt), point) ** 2
+    return sqDist
+
+
 if __name__ == "__main__":
     print("Multi Sensor Localization - armasuisse W+T, Adrian Schneider")
     print("############################################################\n")
 
-    # (angle, distance to line, sensor accuracy (as lower as better))
-    sensors = [(0.0, 1.0, 1.0),
-               (math.pi / 2.0, -2.0, 1.0)] # the lines intersect at (2.0, 1.0)
+    # (line angle, point on line, sensor accuracy (as lower as better))
+    sensors = [(0.0, (0.0, 0.0), 1.0),    # y = 0x + 0
+               (math.pi / 4, (0.0, 0.0), 1.0)] # y = 1x + 0
 
-    print(comp_a(sensors), " * x + ", comp_h(sensors), " * y = ", comp_f(sensors))
-    print(comp_h(sensors), " * x + ", comp_b(sensors), " * y = ", comp_g(sensors))
+    print( accum_distSQ(sensors, (0, 0)) )
 
-    x, y = 0.0, 0.0
-    dist = x * math.sin(math.pi / 2.0) - y * math.cos(math.pi / 2.0) + 2.0
-    print(dist)
 
 
