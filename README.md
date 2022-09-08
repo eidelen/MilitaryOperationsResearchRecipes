@@ -50,3 +50,15 @@ The following table summarizes the optimal search strategies for different total
 Reference: Military Operations Research, Jaiswal
 
 
+## Optimal Target Location
+
+Many reconnaissance tasks in military are about localizing enemy threats. 
+Not seldom these information are redundant and a good approach is to consider them all.
+In the following [example](localization.py) it is shown how the optimal target position is computed based on multiple sensors on different location.
+Solely the direction of the spotted target is of interest.
+
+<p align="center"><img alt="target location" src="docs/img/localization.png" width="70%"></p>
+
+The optimal target position minimizes the accumulated distances to each sensor line, where the distance refers to the minimal distance between a point and a line.
+
+
