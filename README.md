@@ -54,11 +54,28 @@ Reference: Military Operations Research, Jaiswal
 
 Many reconnaissance tasks in military are about localizing enemy threats. 
 Not seldom these information are redundant and a good approach is to consider them all.
-In the following [example](localization.py) it is shown how the optimal target position is computed based on multiple sensors on different location.
-Solely the direction of the spotted target is of interest.
+In the following [example](localization.py) it is shown how the optimal target position <img src="https://latex.codecogs.com/svg.image?\left&space;(&space;x,&space;y&space;\right&space;)" title="https://latex.codecogs.com/svg.image?\left ( x, y \right )" /> is computed based on multiple sensors <img src="https://latex.codecogs.com/svg.image?s_i" title="https://latex.codecogs.com/svg.image?s_i" /> on different location.
+Solely the individula direction <img src="https://latex.codecogs.com/svg.image?\alpha_i" title="https://latex.codecogs.com/svg.image?\alpha_i" /> towards the spotted target and the sensor's position <img src="https://latex.codecogs.com/svg.image?\left&space;(&space;p_i,&space;q_i&space;\right&space;)" title="https://latex.codecogs.com/svg.image?\left ( p_i, q_i \right )" /> is of interest.
+The optimal target position minimizes the accumulated distances to each sensor line, where the distance refers to the minimal distance <img src="https://latex.codecogs.com/svg.image?d_i" title="https://latex.codecogs.com/svg.image?d_i" /> between a point and a line.
 
-<p align="center"><img alt="target location" src="docs/img/localization.png" width="70%"></p>
+<p align="center"><img src="https://latex.codecogs.com/svg.image?\min_{x,&space;y}&space;\sum_{i=1}^{n}&space;d_i^2&space;\;\;\text{&space;with}\;\;&space;d_i&space;=&space;cos(\alpha_i)(q_i-y)&space;-&space;sin(\alpha)(p_i-x)&space;" title="https://latex.codecogs.com/svg.image?\min_{x, y} \sum_{i=1}^{n} d_i^2 \;\;\text{ with}\;\; d_i = cos(\alpha_i)(q_i-y) - sin(\alpha)(p_i-x) " /></p
 
-The optimal target position minimizes the accumulated distances to each sensor line, where the distance refers to the minimal distance between a point and a line.
+The concrete example consists of four sensors (blue) spotting the very same target. 
+The sensor positions are expressed in the Swiss format Landesvermessung LV95.
+
+|  <img src="https://latex.codecogs.com/svg.image?s_i" title="https://latex.codecogs.com/svg.image?s_i" />  | <img src="https://latex.codecogs.com/svg.image?\alpha_i" title="https://latex.codecogs.com/svg.image?\alpha_i" /> | <img src="https://latex.codecogs.com/svg.image?\left&space;(&space;p_i,&space;q_i&space;\right&space;)" title="https://latex.codecogs.com/svg.image?\left ( p_i, q_i \right )" /> | 
+| --- | ---  | --- | 
+| 1 | -30 | (2615050.2, 1170313.8) |
+| 2 | 55 | (2615030.5, 1170021.7) | 
+| 3 | 135 | (2615367.0, 1170022.6) |  
+| 4 | 200 |(2615434.7, 1170302.6) | 
+
+The optimal target location is marked by a red X.
+
+<p align="center"><img alt="target location" src="docs/img/localization.png" width="60%"></p>
+
+
+
+
 
 
