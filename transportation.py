@@ -5,40 +5,33 @@ if __name__ == "__main__":
     print("Optimal Transportation - armasuisse W+T, Adrian Schneider")
     print("#########################################################\n")
 
-    # (base, destination, time)
+    # road distances in km [dTM, dTW, dTA,  dIM, dIW, dIA]
+    c = [12, 14, 17, 14, 21, 16]
 
-    # example https://www.youtube.com/watch?v=WZIyL6pcItY
+    # unknowns number of products from-to [nTM, nTW, nTA,  nIM, nIW, nIA]
 
-    # unknowns [xb1, xb2, xb3, xt1, xt2, xt3]
+    # everything transported from depot T < 22:  nTM + nTW + nTA < 22
+    # everything transported from depot I < 21:  nIM + nIW + nIA < 21
+    AUb = [[1, 1, 1, 0, 0, 0],
+           [0, 0, 0, 1, 1, 1]]
+    # available in depots
+    qT = 22
+    qI = 21
+    bUb = [qT, qI]
 
-    # costs on road[b1, b2, b3, t1, t2, t3]
-    c = [5, 6, 4, 6, 3, 7]
+    # demands at destinations
+    # everything received by M: nTM + nIM = 15
+    # everything received by W: nTW + nIW = 20
+    # everything received by A: nTA + nIA = 5
+    AEq = [[1, 0, 0, 1, 0, 0],
+          [0, 1, 0, 0, 1, 0],
+          [0, 0, 1, 0, 0, 1]]
+    bEq = [15, 20, 5]
 
-    AUb = [[1, 1, 1, 0, 0, 0], # total number at base 1
-         [0, 0, 0, 1, 1, 1]] # total number at base 2
-    bUb = [900, 500]
-
-    AEq = [[1, 0, 0, 1, 0, 0], # total delivery at dest 1
-          [0, 1, 0, 0, 1, 0], # total delivery at dest 2
-          [0, 0, 1, 0, 0, 1]] # total delivery at dest 3
-    bEq = [200, 300, 250]
-
-    xBounds = [(0, 300), (0, 300), (0, 300), (0, 500), (0, 500), (0, 500)]
+    # bounds: all n >= 0, all nTX < qT, all nMX < qI
+    xBounds = [(0, qT), (0, qT), (0, qT), (0, qI), (0, qI), (0, qI)]
 
     res = opt.linprog(c, A_ub=AUb, b_ub=bUb, A_eq=AEq, b_eq=bEq, bounds=xBounds)
 
-    print(res)
-
-
-
-
-    """
-    from scipy.optimize import linprog
-c = [-1, 4]
-A = [[-3, 1], [1, 2]]
-b = [6, 4]
-x0_bounds = (None, None)
-x1_bounds = (-3, None)
-res = linprog(c, A_ub=A, b_ub=b, bounds=[x0_bounds, x1_bounds])
-res.fun
-"""
+    print("Total km driven:", res.fun)
+    print("Number of systems from-to:", res.x)
