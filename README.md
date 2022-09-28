@@ -75,6 +75,18 @@ The optimal target location is marked by a red X.
 <p align="center"><img alt="target location" src="docs/img/localization.png" width="60%"></p>
 
 
+## Solving Transportation Problem
+
+Logistics is an important aspect in military operations. 
+Transporting the required equipment in an effective manner from one place to the other is, therefore, crucial. 
+Following [example](transportation.py) depicts a simple transportation problem, in which one certain type of equipment is shipped from two depots to three destinations.  
+The optimal transportation strategy is the one requiring the least accumulated driving distance.
+
+<p align="center"><img alt="target location" src="docs/img/transportation.png" width="60%"></p>
+
+
+
+
 
 
 
