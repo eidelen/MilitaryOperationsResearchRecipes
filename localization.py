@@ -1,5 +1,10 @@
 import math
 import scipy.optimize as opt
+
+# necessary on korean pc?!
+import matplotlib
+matplotlib.use('TkAgg')
+
 import matplotlib.pyplot as plt
 
 def dist_pnt2line(line, point):
