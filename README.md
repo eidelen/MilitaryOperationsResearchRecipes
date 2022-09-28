@@ -79,11 +79,18 @@ The optimal target location is marked by a red X.
 
 Logistics is an important aspect in military operations. 
 Transporting the required equipment in an effective manner from one place to the other is, therefore, crucial. 
-Following [example](transportation.py) depicts a simple transportation problem, in which one certain type of equipment is shipped from two depots to three destinations.  
+Following [example](transportation.py) depicts a simple transportation problem, in which one certain type of missile system is shipped from two depots (blue) to three destinations (red).
 The optimal transportation strategy is the one requiring the least accumulated driving distance.
-
 <p align="center"><img alt="target location" src="docs/img/transportation.png" width="60%"></p>
 
+The figure below is a more regular way of representing such a transportation task.
+The blue number next to the depot indicates the number of missile systems which are available at this base. 
+The red number right of the destination is the number of systems required at this side.
+The black number above the edge is the corresponding distance from the depot to the destination.
+<p align="center"><img alt="target location" src="docs/img/transportation2.png" width="40%"></p>
+
+This problem can be solved by Linear Programming.
+Let us assume the optimal transportation of the form <img src="https://latex.codecogs.com/svg.image?[n_{TM},&space;n_{TW},&space;n_{TA},&space;n_{IW},&space;n_{IW},&space;n_{IW}]" title="https://latex.codecogs.com/svg.image?[n_{TM}, n_{TW}, n_{TA}, n_{IW}, n_{IW}, n_{IW}]" />, where the first element holds the number of missile systems moved from deopt <b>T</b> to destination <b>M</b>, and so on.
 
 
 
