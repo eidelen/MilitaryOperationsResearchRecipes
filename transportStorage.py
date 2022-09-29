@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     airTransportCostPerShell = 10       # airlifts at day 2, day 3 and day 4
     truckTransportCostPerShell = 5      # road transport at day 1
-    storageFrontCostsPerShell = 1
+    storageFrontCostsPerShell = 3
     storageChangeCosts = 5
 
     truckCapacity = 3000
