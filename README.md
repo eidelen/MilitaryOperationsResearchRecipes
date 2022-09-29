@@ -75,7 +75,41 @@ The optimal target location is marked by a red X.
 <p align="center"><img alt="target location" src="docs/img/localization.png" width="60%"></p>
 
 
+## Solving Transportation Problem
 
+Logistics is an important aspect in military operations. 
+Transporting the required equipment in an effective manner from one place to the other is, therefore, crucial. 
+Following [example](transportation.py) depicts a simple transportation problem, in which one certain type of missile system is shipped from two depots (blue) to three destinations (red).
+The optimal transportation strategy is the one requiring the least accumulated driving distance.
+<p align="center"><img alt="target location" src="docs/img/transportation.png" width="60%"></p>
 
+The figure below is a more regular way of representing such a transportation task.
+The blue number next to the depot indicates the number of missile systems which are available at this base. 
+The red number right of the destination is the number of systems required at this side.
+The black number above the edge is the corresponding distance from the depot to the destination.
+<p align="center"><img alt="target location" src="docs/img/transportation2.png" width="40%"></p>
 
+This problem can be solved by Linear Programming.
+Let us assume the optimal transportation of the form <img src="https://latex.codecogs.com/svg.image?[n_{TM},&space;n_{TW},&space;n_{TA},&space;n_{IW},&space;n_{IW},&space;n_{IW}]" title="https://latex.codecogs.com/svg.image?[n_{TM}, n_{TW}, n_{TA}, n_{IW}, n_{IW}, n_{IW}]" />, where for example the first element <img src="https://latex.codecogs.com/svg.image?n_{TM}" title="https://latex.codecogs.com/svg.image?n_{TM}" /> holds the number of missile systems moved from deopt <b>T</b> to destination <b>M</b>, and so on.
+The linear program of this particular problem looks as follows:
 
+The obective function (accumulated distance) to be minimized
+
+<img src="https://latex.codecogs.com/svg.image?\text{Objective&space;Function:&space;&space;}&space;12&space;\cdot&space;n_{TM}&space;&plus;&space;14&space;\cdot&space;n_{TW}&space;&plus;&space;17&space;\cdot&space;n_{TA}&space;&plus;&space;14&space;\cdot&space;n_{IM}&space;&plus;&space;21&space;\cdot&space;n_{IW}&space;&plus;&space;16&space;\cdot&space;n_{IA}" title="https://latex.codecogs.com/svg.image?\text{Objective Function: &space;} 12 \cdot n_{TM} + 14 \cdot n_{TW} + 17 \cdot n_{TA} + 14 \cdot n_{IM} + 21 \cdot n_{IW} + 16 \cdot n_{IA}" />
+
+Two constraints on the depot sides
+
+<img src="https://latex.codecogs.com/svg.image?\begin{align*}&space;n_{TM}&space;&plus;&space;n_{TW}&space;&plus;&space;n_{TA}&space;&\leq&space;22&space;\\&space;n_{IM}&space;&plus;&space;n_{IW}&space;&plus;&space;n_{IA}&space;&\leq&space;21\end{align*}" title="https://latex.codecogs.com/svg.image?\begin{align*} n_{TM} + n_{TW} + n_{TA} &\leq 22 \\ n_{IM} + n_{IW} + n_{IA} &\leq 21\end{align*}" />
+
+The constraints on the destination sides
+
+<img src="https://latex.codecogs.com/svg.image?\begin{align*}&space;n_{TM}&space;&plus;&space;n_{IM}&space;&=&space;15&space;\\&space;n_{TW}&space;&plus;&space;n_{IW}&space;&=&space;20&space;\\&space;n_{TA}&space;&plus;&space;n_{IA}&space;&=&space;5\end{align*}" title="https://latex.codecogs.com/svg.image?\begin{align*} n_{TM} + n_{IM} &= 15 \\ n_{TW} + n_{IW} &= 20 \\ n_{TA} + n_{IA} &= 5\end{align*}" />
+
+Further on there is nothing like negative transportations, so
+
+<img src="https://latex.codecogs.com/svg.image?\forall&space;n&space;\in&space;[n_{TM},&space;n_{TW},&space;n_{TA},&space;n_{IM},&space;n_{IW},&space;n_{IA}],&space;n&space;\geq&space;0" title="https://latex.codecogs.com/svg.image?\forall n \in [n_{TM}, n_{TW}, n_{TA}, n_{IM}, n_{IW}, n_{IA}], n \geq 0" />
+
+Solving [this linear program](transportation.py) leads to following optimal transportation process.
+The green numbers denote the delivered missile systems from a depot to a destination.
+The corresponding accumulated transportation distance is 566 km.
+<p align="center"><img alt="target location" src="docs/img/transportation3.png" width="40%"></p>
