@@ -113,3 +113,26 @@ Solving [this linear program](transportation.py) leads to following optimal tran
 The green numbers denote the delivered missile systems from a depot to a destination.
 The corresponding accumulated transportation distance is 566 km.
 <p align="center"><img alt="target location" src="docs/img/transportation3.png" width="40%"></p>
+
+
+## Transportation & Storage Optimization 
+
+This example is a more advanced version of the previous logistics problem.
+Instead of a single factor, here we deal with multiple aspects.
+It is assumed that during the next four days there will be heavy air attacks.
+Location A is a favourable position to ramp up a mobile air defence station.
+Our responsibility is the planning of a costeffective shipment of ammunition, shells, from depot T to location A, by considering following given constraints:
+- At day 1, the shells can be transported on the road by truck. Maximum 3000 pieces for 5 CHF per piece.
+- It is assumed that the air attacks at day 1 destroy the roads. Thus, the transportation at day 2, day 3 and day 4 are excecuted with an helicopter. Maximum 1500 pieces at a transportation price of 10 CHF per piece.
+- Digging the shells' storage place and guarding the ammunition is very labour intensive, and therefore cost relevant. Storing 1 shell for 1 day costs 3 CHF. Increasing or decreasing the storage place costs 5 CHF per shell.
+<p align="center"><img alt="target location" src="docs/img/transportStorage0.png" width="50%"></p>
+
+This optimization problem can be solved with Linear Programming. 
+Here is [the actual code](transportStorage.py) which executes the optimization.
+There are some nice tricks which are pointed out in the source.
+The figure below shows the optimal logistics.
+<p align="center"><img alt="target location" src="docs/img/transportStorage.png" width="60%"></p>
+
+
+
+
