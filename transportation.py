@@ -1,4 +1,3 @@
-import math
 import scipy.optimize as opt
 
 if __name__ == "__main__":
