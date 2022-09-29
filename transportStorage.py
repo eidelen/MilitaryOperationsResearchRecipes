@@ -12,12 +12,12 @@ if __name__ == "__main__":
     airTransportCostPerShell = 10       # airlifts at day 2, day 3 and day 4
     truckTransportCostPerShell = 5      # road transport at day 1
     storageFrontCostsPerShell = 1
-    storageChangeCosts = 10
+    storageChangeCosts = 5
 
     truckCapacity = 3000
     airLiftCapacity = 1500
 
-    useShellsDay1, useShellsDay2, useShellsDay3, useShellsDay4 = 1000, 2000, 1000, 2000
+    useShellsDay1, useShellsDay2, useShellsDay3, useShellsDay4 = 1200, 1000, 2100, 1600
 
     # unknowns to solve:
     # [shellDeliverDay1, ..., shellDeliverDay4, shellStorageDay1, ..., shellStorageDay4,
@@ -70,6 +70,7 @@ if __name__ == "__main__":
 
     res = opt.linprog(costs, A_eq=AEq, b_eq=bEq, A_ub=AUb, b_ub=bUb, bounds=xbounds)
 
+    print("Optimization Result:", res.status)
     print("Total costs:", res.fun)
     print("Transports [road, air, air , air]:", res.x)
 
