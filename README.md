@@ -32,7 +32,7 @@ The table below summarizes the properties of the regions.
 | Area 5 | water | 1.9  | 0.15 |
 | Area 6 | mountain | 9.1  | 0.05   |
 
-Here is a [little example](optimal-search.py) of how such a problem can be solved by using scipy's SLSQP solver with constraints.
+Here is a [little example](code/optimal-search.py) of how such a problem can be solved by using scipy's SLSQP solver with constraints.
 Note that there might exist better approaches to tackle this task.
 The following table summarizes the optimal search strategies for different total search efforts of <img src="https://latex.codecogs.com/svg.image?\inline&space;t&space;=&space;3,&space;5,&space;8,&space;13&space;&space;" title="https://latex.codecogs.com/svg.image?\inline t = 3, 5, 8, 13 " /> hours.
 
@@ -54,7 +54,7 @@ Reference: Military Operations Research, Jaiswal
 
 Many reconnaissance tasks in military are about localizing enemy threats. 
 Not seldom these information are redundant and a good approach is to consider them all.
-In the following [example](localization.py) it is shown how the optimal target position <img src="https://latex.codecogs.com/svg.image?\left&space;(&space;x,&space;y&space;\right&space;)" title="https://latex.codecogs.com/svg.image?\left ( x, y \right )" /> is computed based on multiple sensors <img src="https://latex.codecogs.com/svg.image?s_i" title="https://latex.codecogs.com/svg.image?s_i" /> on different location.
+In the following [example](code/localization.py) it is shown how the optimal target position <img src="https://latex.codecogs.com/svg.image?\left&space;(&space;x,&space;y&space;\right&space;)" title="https://latex.codecogs.com/svg.image?\left ( x, y \right )" /> is computed based on multiple sensors <img src="https://latex.codecogs.com/svg.image?s_i" title="https://latex.codecogs.com/svg.image?s_i" /> on different location.
 Solely the individula direction <img src="https://latex.codecogs.com/svg.image?\alpha_i" title="https://latex.codecogs.com/svg.image?\alpha_i" /> towards the spotted target and the sensor's position <img src="https://latex.codecogs.com/svg.image?\left&space;(&space;p_i,&space;q_i&space;\right&space;)" title="https://latex.codecogs.com/svg.image?\left ( p_i, q_i \right )" /> is of interest.
 The optimal target position minimizes the accumulated distances to each sensor line, where the distance refers to the minimal distance <img src="https://latex.codecogs.com/svg.image?d_i" title="https://latex.codecogs.com/svg.image?d_i" /> between a point and a line.
 
@@ -79,7 +79,7 @@ The optimal target location is marked by a red X.
 
 Logistics is an important aspect in military operations. 
 Transporting the required equipment in an effective manner from one place to the other is, therefore, crucial. 
-Following [example](transportation.py) depicts a simple transportation problem, in which one certain type of missile system is shipped from two depots (blue) to three destinations (red).
+Following [example](code/transportation.py) depicts a simple transportation problem, in which one certain type of missile system is shipped from two depots (blue) to three destinations (red).
 The optimal transportation strategy is the one requiring the least accumulated driving distance.
 <p align="center"><img alt="target location" src="docs/img/transportation.png" width="60%"></p>
 
@@ -109,7 +109,7 @@ Further on there is nothing like negative transportations, so
 
 <img src="https://latex.codecogs.com/svg.image?\forall&space;n&space;\in&space;[n_{TM},&space;n_{TW},&space;n_{TA},&space;n_{IM},&space;n_{IW},&space;n_{IA}],&space;n&space;\geq&space;0" title="https://latex.codecogs.com/svg.image?\forall n \in [n_{TM}, n_{TW}, n_{TA}, n_{IM}, n_{IW}, n_{IA}], n \geq 0" />
 
-Solving [this linear program](transportation.py) leads to following optimal transportation process.
+Solving [this linear program](code/transportation.py) leads to following optimal transportation process.
 The green numbers denote the delivered missile systems from a depot to a destination.
 The corresponding accumulated transportation distance is 566 km.
 <p align="center"><img alt="target location" src="docs/img/transportation3.png" width="40%"></p>
@@ -128,7 +128,7 @@ Our responsibility is the planning of a costeffective shipment of ammunition, sh
 <p align="center"><img alt="target location" src="docs/img/transportStorage0.png" width="50%"></p>
 
 This optimization problem can be solved with Linear Programming. 
-Here is [the actual code](transportStorage.py) which executes the optimization.
+Here is [the actual code](code/transportStorage.py) which executes the optimization.
 There are some nice tricks which are pointed out in the source.
 The figure below shows the optimal logistics.
 <p align="center"><img alt="target location" src="docs/img/transportStorage.png" width="60%"></p>
