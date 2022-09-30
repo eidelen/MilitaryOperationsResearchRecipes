@@ -71,6 +71,51 @@ class TestLinearProgrammingTricks(unittest.TestCase):
         self.assertAlmostEqual(res.x[0], 1)
         self.assertAlmostEqual(res.x[1], 1)
 
+    def test_absolute_LP(self):
+        # Using absolute values abs(x) in the objective function is not possible, as it
+        # is not a linear form. But there exists a trick for bypassing that issue.
+
+        # Lets use the previous example and extend it with additional playing dimensions.
+        # The actual optimization doesnt matter here.
+
+        # set x2 = 5, x3 = 2
+        AEq = [[0, 0, 1, 0, 0], [0, 0, 0, 1, 0]]
+        bEq = [5, 2]
+
+        AUb = [
+                    # x0 >= -1  ->   -x0 <= 1,  x0 <= 1,  x1 <= 1,  x1 >= -1  ->  -x1 <= 1
+                    [-1, 0, 0, 0, 0], [1, 0, 0, 0, 0], [0, 1, 0, 0, 0], [0, -1, 0, 0, 0],
+
+                    # Here the actual trick: lets store the abs(x3-x2) in x4, which in fact would be 3.
+                    [0, 0, -1, 1, -1],   # -x2 + x3 <= x4  ->  -x2 + x3 -x4 <= 0
+                    [0, 0,  1, -1, -1],  #  x2 - x3 <= x4  ->   x2 - x3 -x4 <= 0
+                    [0, 0, 0, 0, -1]     #  x4 >= 0   ->  -x4 <= 0
+        ]
+        bUb = [1, 1, 1, 1, 0, 0, 0]
+
+        noBounds = [(None, None), (None, None), (None, None), (None, None), (None, None)]
+
+        # still x0 + x1
+        objFunc = [1, 1, 0, 0, 0]
+
+        res = opt.linprog(c=objFunc, A_ub=AUb, b_ub=bUb, A_eq=AEq, b_eq=bEq, bounds=noBounds)
+
+        # the introduced sandbox dimensions do not interact with the optimization
+        self.assertAlmostEqual(res.fun, -2)
+        self.assertAlmostEqual(res.x[0], -1)
+        self.assertAlmostEqual(res.x[1], -1)
+
+        self.assertAlmostEqual(res.x[2], 5) # set directly
+        self.assertAlmostEqual(res.x[3], 2) # set directly
+        self.assertAlmostEqual(res.x[4], 3)  # set directly
+
+        # switching x2 and x3 doesnt change x4
+        bEq = [2, 5]
+        res = opt.linprog(c=objFunc, A_ub=AUb, b_ub=bUb, A_eq=AEq, b_eq=bEq, bounds=noBounds)
+        self.assertAlmostEqual(res.x[3], 5)
+        self.assertAlmostEqual(res.x[2], 2)
+        self.assertAlmostEqual(res.x[4], 3)
+
 
 if __name__ == '__main__':
     unittest.main()
