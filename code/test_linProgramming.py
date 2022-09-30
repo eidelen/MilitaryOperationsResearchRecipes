@@ -116,6 +116,36 @@ class TestLinearProgrammingTricks(unittest.TestCase):
         self.assertAlmostEqual(res.x[2], 2)
         self.assertAlmostEqual(res.x[4], 3)
 
+    def test_IntegerProgramming(self):
+
+        AUb = [
+                    # x0 >= -1.5  ->   -x0 <= 1.5,  x0 <= 1.5,  x1 <= 1.5,  x1 >= -1.5  ->  -x1 <= 1.5
+                    [-1, 0], [1, 0], [0, 1], [0, -1],
+        ]
+        bUb = [1.5, 1.5, 1.5, 1.5]
+
+        noBounds = [(None, None), (None, None)]
+
+        # x0 + x1
+        objFunc = [1, 1]
+
+        res = opt.linprog(c=objFunc, A_ub=AUb, b_ub=bUb,  bounds=noBounds)
+
+        # solution with floats
+        self.assertAlmostEqual(res.fun, -3)
+        self.assertAlmostEqual(res.x[0], -1.5)
+        self.assertAlmostEqual(res.x[1], -1.5)
+
+        # lets x1 be an integer
+        res = opt.linprog(c=objFunc, A_ub=AUb, b_ub=bUb, bounds=noBounds, integrality=[0, 1])
+
+        # solution with floats
+        self.assertAlmostEqual(res.fun, -2.5)
+        self.assertAlmostEqual(res.x[0], -1.5)
+        self.assertAlmostEqual(res.x[1], -1)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
