@@ -35,5 +35,42 @@ class TestLinearProgrammingTricks(unittest.TestCase):
         self.assertAlmostEqual(res.x[1], -3)
 
 
+    def test_min_LP(self):
+        # A simple example of finding min in a 2 by 2 rectangle with (0/0) in the center
+        # x0 >= -1  ->   -x0 <= 1,  x0 <= 1,  x1 <= 1,  x1 >= -1  ->  -x1 <= 1
+        AUb = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+        bUb = [1, 1, 1, 1]
+
+        noBounds = [(None, None), (None, None)]
+
+        # minimize x0 + x1 -> [-1,-1] = -2
+        objFunc = [1, 1]
+
+        res = opt.linprog(c=objFunc, A_ub=AUb, b_ub=bUb, bounds=noBounds)
+
+        self.assertAlmostEqual(res.fun, -2)
+        self.assertAlmostEqual(res.x[0], -1)
+        self.assertAlmostEqual(res.x[1], -1)
+
+
+    def test_max_LP(self):
+        # Find max in previous problem
+        # x0 >= -1  ->   -x0 <= 1,  x0 <= 1,  x1 <= 1,  x1 >= -1  ->  -x1 <= 1
+        AUb = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+        bUb = [1, 1, 1, 1]
+
+        noBounds = [(None, None), (None, None)]
+
+        # maximize x0 + x1 -> [1,1] = 2
+        # linprog minimizes - to maximize, Objective function has to be inverted!!
+        objFunc = [-1, -1]
+
+        res = opt.linprog(c=objFunc, A_ub=AUb, b_ub=bUb, bounds=noBounds)
+
+        self.assertAlmostEqual(-res.fun, 2) # as objective function was inverted, function value has to be inverted as well
+        self.assertAlmostEqual(res.x[0], 1)
+        self.assertAlmostEqual(res.x[1], 1)
+
+
 if __name__ == '__main__':
     unittest.main()
