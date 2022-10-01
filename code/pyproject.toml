@@ -3,13 +3,14 @@ name = "operations-research-recipes"
 version = "0.1.0"
 description = ""
 authors = ["Adrian Schneider <adrian.schneider.pr@gmail.com>"]
-license = "MI$t"
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8,<3.12"
 numpy = "^1.23.1"
 matplotlib = "^3.5.3"
 scipy = "^1.9.0"
+hmmlearn = "^0.2.8"
 
 [tool.poetry.dev-dependencies]
 
