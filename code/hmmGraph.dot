@@ -1,0 +1,39 @@
+// Attack HM: dot -T png round-table.gv -o test.png
+
+digraph {
+
+rank=same   {
+                F [label=Foggy]
+                C [label=Cloudy]
+                S [label=Sunny]
+             }
+
+                N [label=North]
+                Q [label=South]
+
+
+
+
+	// Fog
+	F -> C;
+	F -> S;
+	F -> F;
+	F -> N;
+	F -> Q;
+
+	// Cloud
+	C -> C;
+	C -> S;
+	C -> F;
+	C -> N;
+	C -> Q;
+
+	// Sun
+	S -> C;
+	S -> S;
+	S -> F;
+	S -> N;
+	S -> Q;
+
+
+}

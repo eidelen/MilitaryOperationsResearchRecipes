@@ -5,6 +5,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
+
 if __name__ == "__main__":
     print("South North Attack HMM - armasuisse W+T, Adrian Schneider")
     print("#########################################################\n")
