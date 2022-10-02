@@ -1,39 +1,47 @@
-// Attack HM: dot -T png round-table.gv -o test.png
+// Attack HM: dot -T pdf .\hmmGraph.dot -o test.pdf
 
 digraph {
 
-rank=same   {
-                F [label=Foggy]
-                C [label=Cloudy]
-                S [label=Sunny]
+    edge [weight=0.5]
+
+            //B [label=Start]
+
+
+            F [label=Foggy, style=filled, fillcolor=red]
+            C [label=Cloudy, style=filled, fillcolor=blue, fontcolor=white]
+            S [label=Sunny, style=filled, fillcolor=green]
+
+
+rank = same   {
+                N [label=North, shape=rectangle]
+                Q [label=South, shape=rectangle]
              }
 
-                N [label=North]
-                Q [label=South]
 
-
-
+    // Start
+  //  B -> F [label = "0.7"]
+  //  B -> C
+  //  B -> S
 
 	// Fog
-	F -> C;
-	F -> S;
-	F -> F;
-	F -> N;
-	F -> Q;
+	F -> C [label = "0.4"];
+	F -> S [label = "0.3"];
+	F:nw -> F:sw [label = "0.3"];
+	F -> N [label = "0.4"];
+	F -> Q [label = "0.6"];
 
 	// Cloud
-	C -> C;
-	C -> S;
-	C -> F;
-	C -> N;
-	C -> Q;
+	C -> C [label = "0.5"];
+	C -> S [label = "0.3"];
+	C -> F [label = "0.2"];
+	C -> N [label = "0.2"];
+	C -> Q [label = "0.8"];
 
 	// Sun
-	S -> C;
-	S -> S;
-	S -> F;
-	S -> N;
-	S -> Q;
-
+	S -> C [label = "0.2"];
+	S -> S [label = "0.6"];
+	S -> F [label = "0.2"];
+	S -> N [label = "0.8"];
+	S -> Q [label = "0.2"];
 
 }
