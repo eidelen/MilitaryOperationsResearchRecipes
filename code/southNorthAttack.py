@@ -13,21 +13,21 @@ if __name__ == "__main__":
     randomSeed = 28
 
     # first state probability: Fog   Cloud  Sun
-    startStateProb = np.array([0.2,  0.3,   0.5])
+    startStateProb = np.array([1/3,  1/3,   1/3])
 
     # state transition probability matrix:   Fog   Cloud   Sun
     stateTransMat = np.array(   [
                                  #   Fog   Cloud  Sun
-                                    [0.4,  0.4,   0.2], # transitions from state fog
+                                    [0.3,  0.4,   0.3], # transitions from state fog
                                     [0.2,  0.5,   0.3], # transitions from state cloud
-                                    [0.3,  0.2,   0.5]  # transitions from state sun
+                                    [0.2,  0.2,   0.6]  # transitions from state sun
                                 ] )
 
     stateEmissionProb = np.array(   [
                                      #   North     South
-                                        [0.3,      0.7],     # attacking side when fog
+                                        [0.4,      0.6],     # attacking side when fog
                                         [0.2,      0.8],    # attacking side when cloud
-                                        [0.7,      0.3]      # attacking side when sun
+                                        [0.8,      0.2]      # attacking side when sun
                                     ])
 
     # init hmm
@@ -51,6 +51,16 @@ if __name__ == "__main__":
     for ats, hs in zip(attackSides, hiddenStates):
         cntAtks[ats[0]][hs] += 1
 
+    # predict next days' attack side based on last 12 days observation
+    # note: documentation is somehow bad
+    nextDayNorthLogProb = np.array([[0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0,       0]])
+    nextDaySouthLogProb = np.array([[0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0,       1]])
+
+    print("Likely attack tomorrow:")
+    print("North:", attackHMM.score(nextDayNorthLogProb))
+    print("South:", attackHMM.score(nextDaySouthLogProb))
+
+
     nBars = 2
     fogCnts = (cntAtks[0][0], cntAtks[1][0])
     cloudCnts = (cntAtks[0][1], cntAtks[1][1])
@@ -67,4 +77,3 @@ if __name__ == "__main__":
     plt.xticks(ind, ('North', 'South'))
     plt.legend(labels=['Foggy', 'Cloudy', 'Sunny'])
     plt.show()
-

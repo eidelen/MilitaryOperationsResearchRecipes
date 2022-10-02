@@ -24,3 +24,5 @@ class TestHiddenMarkovModels(unittest.TestCase):
         np.testing.assert_array_equal(samples, [[1], [1], [1], [1]])
         np.testing.assert_array_equal(corrStates, [1, 1, 1, 1])
 
+
+
