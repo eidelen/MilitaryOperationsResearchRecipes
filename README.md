@@ -134,5 +134,24 @@ The figure below shows the optimal logistics.
 <p align="center"><img alt="target location" src="docs/img/transportStorage.png" width="60%"></p>
 
 
+## Estimation of Next Attack 
+
+A command headquarter in a little city is repeatedly attacked by hostile planes over several weeks.
+A  retired mathematician living nearby is annoyed because of the unbearable noise and decides to take care of it.
+Soon she finds out that the attacks are coming either from the South or over the mountain chain in the North.
+<p align="center"><img alt="target location" src="docs/img/attackGuess.png" width="50%"></p>
+
+To her surprise, however, there seems to be a pattern in the north / south attack sequence.
+If yesterday's assault came from the north, today's comes likely also from the north. 
+The same applies to south attacks.
+She decides to visit the command headquarter and tell the soldiers about her findings. 
+To her surprise a whole team is already working on this very same problem. 
+There is a strong correlation between the weather at the enemy's airport and the side from which the city is attacked.
+Due to limited resources the headquarter does not know the exact weather at the enemy's airport and can establish these links only retrospectively. 
+The responsible soldiers have a lot of detailed knowledge but are overwhelmed with the task of combining all these aspects.
+Not so the mathematician.
+With the input of the soldiers she comes up quickly with a <b>Hidden Markov Model</b>.
+<p align="center"><img alt="target location" src="docs/img/attackHMMGraph.png" width="50%"></p>
+
 
 
