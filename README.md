@@ -150,11 +150,11 @@ There is a strong correlation between the weather at the enemy's airport and the
 Due to limited resources the headquarter does not know the exact weather at the enemy's airport and can establish these links only retrospectively. 
 The responsible soldiers have a lot of detailed knowledge but are overwhelmed with the task of combining all these aspects.
 Not so the mathematician.
-With the input of the soldiers and reviewing long term weather statistics she comes up quickly with a <b>Hidden Markov Model</b>.
+With the input of the soldiers and reviewing long term weather statistics she comes up quickly with a <b>Hidden Markov Model</b> and following [code](code/southNorthAttack.py).
 The transition probabilities of foggy, rainy and sunny periods together with observations of previous attacks, allows an estimation for tomorrow's battle.
 <p align="center"><img alt="target location" src="docs/img/attackHMMGraph.png" width="50%"></p>
 
-
+Given the attack sequence of the last 12 days - NORTH, NORTH, SOUTH, SOUTH, NORTH, NORTH, SOUTH, NORTH, SOUTH, SOUTH, SOUTH, NORTH - there is a higher chance that tomorrow's attack comes from the North.
 
 
 
