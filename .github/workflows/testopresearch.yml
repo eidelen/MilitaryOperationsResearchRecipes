@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       max-parallel: 4
       matrix:
@@ -21,10 +21,8 @@ jobs:
       run: |
         cd code
         python -m pip install --upgrade pip
-        pip install poetry
-        poetry --version
-        poetry install --no-interaction
+        pip install scipy numpy hmmlearn
     - name: Run unit tests
       run: |
         cd code
-        poetry run python -m unittest discover
+        python -m unittest discover
